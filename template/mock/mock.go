@@ -10,31 +10,31 @@ import (
 	reflect "reflect"
 )
 
-// MockHelloService is a mock of HelloService interface
-type MockHelloService struct {
+// MockTemplateService is a mock of TemplateService interface
+type MockTemplateService struct {
 	ctrl     *gomock.Controller
-	recorder *MockHelloServiceMockRecorder
+	recorder *MockTemplateServiceMockRecorder
 }
 
-// MockHelloServiceMockRecorder is the mock recorder for MockHelloService
-type MockHelloServiceMockRecorder struct {
-	mock *MockHelloService
+// MockTemplateServiceMockRecorder is the mock recorder for MockTemplateService
+type MockTemplateServiceMockRecorder struct {
+	mock *MockTemplateService
 }
 
-// NewMockHelloService creates a new mock instance
-func NewMockHelloService(ctrl *gomock.Controller) *MockHelloService {
-	mock := &MockHelloService{ctrl: ctrl}
-	mock.recorder = &MockHelloServiceMockRecorder{mock}
+// NewMockTemplateService creates a new mock instance
+func NewMockTemplateService(ctrl *gomock.Controller) *MockTemplateService {
+	mock := &MockTemplateService{ctrl: ctrl}
+	mock.recorder = &MockTemplateServiceMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use
-func (m *MockHelloService) EXPECT() *MockHelloServiceMockRecorder {
+func (m *MockTemplateService) EXPECT() *MockTemplateServiceMockRecorder {
 	return m.recorder
 }
 
 // SayHello mocks base method
-func (m *MockHelloService) SayHello(input *SayHelloInput) (*SayHelloResult, error) {
+func (m *MockTemplateService) SayHello(input *SayHelloInput) (*SayHelloResult, error) {
 	ret := m.ctrl.Call(m, "SayHello", input)
 	ret0, _ := ret[0].(*SayHelloResult)
 	ret1, _ := ret[1].(error)
@@ -42,6 +42,6 @@ func (m *MockHelloService) SayHello(input *SayHelloInput) (*SayHelloResult, erro
 }
 
 // SayHello indicates an expected call of SayHello
-func (mr *MockHelloServiceMockRecorder) SayHello(input interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SayHello", reflect.TypeOf((*MockHelloService)(nil).SayHello), input)
+func (mr *MockTemplateServiceMockRecorder) SayHello(input interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SayHello", reflect.TypeOf((*MockTemplateService)(nil).SayHello), input)
 }

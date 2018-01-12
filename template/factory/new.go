@@ -6,7 +6,7 @@ import (
 	"github.com/theplant/plantpkg/template/internal"
 )
 
-var _ template.HelloService = (*internal.TemplateImpl)(nil)
+var _ template.TemplateService = (*internal.TemplateImpl)(nil)
 
 func New(db *gorm.DB, cfg *template.Config) (service *internal.TemplateImpl) {
 	var err error

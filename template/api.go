@@ -1,5 +1,5 @@
 package template
 
-type HelloService interface {
+type TemplateService interface {
 	SayHello(input *SayHelloInput) (r *SayHelloResult, err error)
 }
