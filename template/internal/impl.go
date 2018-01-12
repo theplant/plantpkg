@@ -7,15 +7,15 @@ import (
 
 type TemplateImpl struct {
 	db             *gorm.DB
-	requiredParam2 string
+	cfg            *template.Config
 	optionalParam1 string
 	optionalParam2 string
 }
 
-func New(db *gorm.DB, requiredParam2 string) (r *TemplateImpl, err error) {
+func New(db *gorm.DB, cfg *template.Config) (r *TemplateImpl, err error) {
 	r = &TemplateImpl{
-		db:             db,
-		requiredParam2: requiredParam2,
+		db:  db,
+		cfg: cfg,
 	}
 	return
 }

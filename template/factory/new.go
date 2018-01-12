@@ -8,9 +8,9 @@ import (
 
 var _ template.HelloService = (*internal.TemplateImpl)(nil)
 
-func New(db *gorm.DB, requiredParam2 string) (service *internal.TemplateImpl) {
+func New(db *gorm.DB, cfg *template.Config) (service *internal.TemplateImpl) {
 	var err error
-	service, err = internal.New(db, requiredParam2)
+	service, err = internal.New(db, cfg)
 	if err != nil {
 		panic(err)
 	}

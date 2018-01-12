@@ -35,7 +35,7 @@ var sayHelloCases = []struct {
 }
 
 func TestSayHello(t *testing.T) {
-	serv := factory.New(nil, "2").OptionalParam1("param1").OptionalParam2("param2")
+	serv := factory.New(nil, &template.Config{Option1: "opt1"}).OptionalParam1("param1").OptionalParam2("param2")
 	for _, c := range sayHelloCases {
 		result, err := serv.SayHello(c.input)
 		if err != nil {
