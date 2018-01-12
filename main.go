@@ -93,6 +93,7 @@ func main() {
 	replaceInFiles(dir, "Template", serviceName)
 
 	fmt.Printf("Package %q generated.\n", generateGoPackagePath)
+	fmt.Printf("cd %s for go to the project directory.\n", dir)
 }
 
 func replaceInFiles(baseDir string, from, to string) {
