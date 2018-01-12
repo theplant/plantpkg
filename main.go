@@ -92,7 +92,7 @@ func main() {
 	replaceInFiles(dir, "template", packageName)
 	replaceInFiles(dir, "Template", serviceName)
 
-	fmt.Printf("You choose %q\n", generateGoPackagePath)
+	fmt.Printf("Package %q generated.\n", generateGoPackagePath)
 }
 
 func replaceInFiles(baseDir string, from, to string) {
