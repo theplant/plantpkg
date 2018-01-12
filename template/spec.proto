@@ -1,0 +1,10 @@
+syntax = "proto3";
+package template;
+
+message SayHelloInput {
+    string hello = 1;
+}
+
+message SayHelloResult {
+    string result = 1;
+}
