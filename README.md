@@ -78,7 +78,7 @@ We intentionly limiting the package exposing API as Go interface for these reaso
 
 Say with the above `CheckoutService` for example, we want to validate the Address before call `ShippingAddressUpdate` and after call it we send an email to the user to notify the change, We can do:
 
-```
+```go
 type ValidateAndNotifyCheckoutService struct {
 	basicCheckout CheckoutService
 }
