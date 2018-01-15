@@ -6,10 +6,11 @@ import (
 	"go/build"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strings"
 	"unicode"
+
+	"github.com/otiai10/copy"
 
 	"github.com/manifoldco/promptui"
 )
@@ -24,17 +25,18 @@ func main() {
 
 	fmt.Println("Your GOPATH:", gopath)
 
-	validate := func(input string) error {
-		// _, err := strconv.ParseFloat(input, 64)
-		// if err != nil {
-		// 	return errors.New("Invalid number")
-		// }
+	validateFileExists := func(input string) error {
+		dir := filepath.Join(gopath, "src", input)
+		_, err := os.Stat(dir)
+		if err == nil {
+			return fmt.Errorf("%s already exists, remove it first to generate.\n", dir)
+		}
 		return nil
 	}
 
 	prompt := promptui.Prompt{
 		Label:    "Generate go package",
-		Validate: validate,
+		Validate: validateFileExists,
 		Default:  "github.com/theplant/mynewpkg",
 	}
 
@@ -44,6 +46,7 @@ func main() {
 		fmt.Printf("%v\n", err)
 		return
 	}
+	dir := filepath.Join(gopath, "src", generateGoPackagePath)
 
 	pkgSegs := strings.Split(generateGoPackagePath, "/")
 	packageName := pkgSegs[len(pkgSegs)-1]
@@ -71,17 +74,9 @@ func main() {
 		return
 	}
 
-	dir := filepath.Join(gopath, "src", generateGoPackagePath)
-	_, err = os.Stat(dir)
-	if err == nil {
-		fmt.Printf("%s already exists, remove it first to generate.\n", dir)
-		return
-	}
-
 	templatePath := filepath.Join(gopath, "src", "github.com/theplant/plantpkg/template")
 
-	cmd := exec.Command("cp", "-r", templatePath, dir)
-	err = cmd.Run()
+	err = copy.Copy(templatePath, dir)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -93,7 +88,7 @@ func main() {
 	replaceInFiles(dir, "Template", serviceName)
 
 	fmt.Printf("Package %q generated.\n", generateGoPackagePath)
-	fmt.Printf("cd %s for go to the project directory.\n", dir)
+	fmt.Printf("cd %s && modd; for go to the project directory and run tests.\n", dir)
 }
 
 func replaceInFiles(baseDir string, from, to string) {
