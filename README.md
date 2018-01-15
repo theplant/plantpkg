@@ -1,4 +1,4 @@
-`plantpkg` is a command line tool to generate an opinioned Go package structure for certain reasons.
+This `plantpkg` is a command line tool to generate an opinioned Go package structure that solves questions like: __How should I organize my Go code?__, __How do I manage dependencies?__
 
 ## How to use
 
@@ -23,6 +23,15 @@ Your GOPATH: /Users/sunfmin/gopkg
 ✔ Service Name: Helloworld
 Package "github.com/theplant/helloworld" generated.
 cd $GOPATH/github.com/theplant/helloworld && modd; for go to the project directory and run tests.
+```
+
+The package depends on `github.com/cortesi/modd` to automatically generate protobuf go structs, and mock package. In order for `modd` command to run correctly, You will need to install:
+
+```
+$ brew install protobuf
+$ go get -v github.com/cortesi/modd
+$ go get -v github.com/golang/mock/mockgen
+$ go get -v ./...
 ```
 
 The command will generate these files inside the Go package.
@@ -61,9 +70,11 @@ The params and results are either Go primitive data types, Or protobuf defined d
 
 We intentionly limiting the package exposing API as Go interface for these reasons:
 
-- Easy to read: Limit the places people come to understand the package. People can come to read your `api.go` to know what features the package provide. and don't need to read implementation details in other files of different directories.
-- Easy to switch: Other packages who use the package can easily change to a different implementation, By switching a different `New` to construct the interface's instance.
-- Easy to extend: We apply [Decoration](https://martinfowler.com/bliki/DecoratedCommand.html) pattern to the service to wrap more features to a basic implementation.
+- __Easy to read__: Limit the places people come to understand the package. People can come to read your `api.go` to know what features the package provide. and don't need to read implementation details in other files of different directories.
+- __Easy to switch__: Other packages who use the package can easily change to a different implementation, By switching a different `New` to construct the interface's instance.
+- __Easy to extend__: We apply [Decoration](https://martinfowler.com/bliki/DecoratedCommand.html) pattern to the service to wrap more features to a basic implementation.
+- __Easy to mock__: Other packages can easily pass in `mock` package instance of the package, when they don't want to test your packages implentation.
+- __Easy to test__: write tests for all functions defined in `api.go`
 
 Say with the above `CheckoutService` for example, we want to validate the Address before call `ShippingAddressUpdate` and after call it we send an email to the user to notify the change, We can do:
 
@@ -140,3 +151,33 @@ Which is not passing optional dependencies in `New` method, But instead create a
 ## Hide internal implementation
 
 `internal/*.go` will be all your internal implementation details source code that you don't need to expose to the people who use your package. You can change the source code inside `internal` package from the bottom up, That won't effect other packages depends on the package.
+
+## Mock support built-in
+
+`mock` folder is a automatically generated package that mocks `api.go` definiation, and provide you a mock package by using `github.com/golang/mock/gomock`.
+
+## A config package ties together all plantpkg packages
+
+In your main application that depends on many `plantpkg` packages, and each of them also depends on their own `plantpkg` packages. You can setup them in a `config` package like this:
+
+```go
+
+func MustGetEmailService() email.EmailService {
+    return emailfactory.New(...)
+}
+
+func MustGetValidationService() validation.ValdationService {
+    return validationfactory.New(...)
+}
+
+func MustGetCheckoutService() checkout.CheckoutService {
+    return checkoutfactory.New(...)
+}
+
+func MustGetValidateAndNotifyCheckoutService() checkout.CheckoutService {
+    vs := MustGetValidationService()
+    es := MustGetEmailService()
+    checkout := MustGetCheckoutService()
+    return vncheckoutfactory.New(..., checkout, vs, es)
+}
+```
