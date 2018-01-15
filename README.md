@@ -68,12 +68,12 @@ type CheckoutService interface {
 
 The params and results are either Go primitive data types, Or protobuf defined data structs.
 
-We intentionly limiting the package exposing API as Go interface for these reasons:
+We intentionally limiting the package exposing API as Go interface for these reasons:
 
 - __Easy to read__: Limit the places people come to understand the package. People can come to read your `api.go` to know what features the package provide. and don't need to read implementation details in other files of different directories.
 - __Easy to switch__: Other packages who use the package can easily change to a different implementation, By switching a different `New` to construct the interface's instance.
 - __Easy to extend__: We apply [Decoration](https://martinfowler.com/bliki/DecoratedCommand.html) pattern to the service to wrap more features to a basic implementation.
-- __Easy to mock__: Other packages can easily pass in `mock` package instance of the package, when they don't want to test your packages implentation.
+- __Easy to mock__: Other packages can easily pass in `mock` package instance of the package, when they don't want to test your packages implementation.
 - __Easy to test__: write tests for all functions defined in `api.go`
 
 Say with the above `CheckoutService` for example, we want to validate the Address before call `ShippingAddressUpdate` and after call it we send an email to the user to notify the change, We can do:
@@ -107,14 +107,14 @@ func (ch *ValidateAndNotifyCheckoutService) ShippingAddressUpdate(checkoutId str
 `spec.proto` is the place for the package to define any outer facing data structs that other package depend on this package. It is defined as [Google Protocol Buffers](https://developers.google.com/protocol-buffers/), The reason for this is:
 
 - Can easily write an wrapper to expose the package through TCP or HTTP with preferable serialization built-in
-- Can embed them into your application API protobuf structs to be part of bigger API definiation
+- Can embed them into your application API protobuf structs to be part of bigger API definition
 - It has pretty good default json format generation by default
 - Can still be used as standard Go structs
 - All other benefits protobuf provides
 
 ## Construct new instance: factory package
 
-`factory/new.go` is for you to construct the new instance of the interface defined in `api.go`. Where normally you pass in foreigh dependencies the package depends, like database connection, configurations, or other `plantpkg` created package instances (services).
+`factory/new.go` is for you to construct the new instance of the interface defined in `api.go`. Where normally you pass in foreign dependencies the package depends, like database connection, configurations, or other `plantpkg` created package instances (services).
 
 For example:
 ```go
@@ -146,7 +146,7 @@ Which is not passing optional dependencies in `New` method, But instead create a
 
 ## The utility that only depends on protobuf structs
 
-`utils.go` is for the utility methods related to this package that only depends on the protobuf data structs, which is useful when the data structs are quite complex, and you want people to easy combine, find, calulate values based on variaty of API functions returned data structs.
+`utils.go` is for the utility methods related to this package that only depends on the protobuf data structs, which is useful when the data structs are quite complex, and you want people to easy combine, find, calculate values based on variety of API functions returned data structs.
 
 ## Hide internal implementation
 
@@ -154,7 +154,7 @@ Which is not passing optional dependencies in `New` method, But instead create a
 
 ## Mock support built-in
 
-`mock` folder is a automatically generated package that mocks `api.go` definiation, and provide you a mock package by using `github.com/golang/mock/gomock`.
+`mock` folder is a automatically generated package that mocks `api.go` definition, and provide you a mock package by using `github.com/golang/mock/gomock`.
 
 ## A config package ties together all plantpkg packages
 
@@ -163,21 +163,21 @@ In your main application that depends on many `plantpkg` packages, and each of t
 ```go
 
 func MustGetEmailService() email.EmailService {
-    return emailfactory.New(...)
+    return emailFactory.New(...)
 }
 
-func MustGetValidationService() validation.ValdationService {
-    return validationfactory.New(...)
+func MustGetValidationService() validation.ValidationService {
+    return validationFactory.New(...)
 }
 
 func MustGetCheckoutService() checkout.CheckoutService {
-    return checkoutfactory.New(...)
+    return checkoutFactory.New(...)
 }
 
 func MustGetValidateAndNotifyCheckoutService() checkout.CheckoutService {
     vs := MustGetValidationService()
     es := MustGetEmailService()
     checkout := MustGetCheckoutService()
-    return vncheckoutfactory.New(..., checkout, vs, es)
+    return vncheckoutFactory.New(..., checkout, vs, es)
 }
 ```
