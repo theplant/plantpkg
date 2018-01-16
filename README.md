@@ -1,4 +1,4 @@
-This `plantpkg` is a command line tool to generate an opinioned Go package structure that solves questions like: __How should I organize my Go code?__, __How do I manage dependencies?__
+This `plantpkg` is a command line tool to generate an opinionated Go package structure that solves questions like: __How should I organize my Go code?__, __How do I manage dependencies?__
 
 ## How to use
 
