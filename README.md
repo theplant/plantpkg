@@ -8,7 +8,7 @@ Install the package with
 $ go get github.com/theplant/plantpkg
 ```
 
-Run this command in terminal and follow promote to generate a new package
+Run this command in terminal and follow prompt to generate a new package
 
 ```
 $ plantpkg

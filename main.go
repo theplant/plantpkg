@@ -35,9 +35,10 @@ func main() {
 	}
 
 	prompt := promptui.Prompt{
-		Label:    "Generate go package",
-		Validate: validateFileExists,
-		Default:  "github.com/theplant/mynewpkg",
+		Label:     "Generate go package",
+		Validate:  validateFileExists,
+		AllowEdit: true,
+		Default:   "github.com/theplant/mynewpkg",
 	}
 
 	generateGoPackagePath, err := prompt.Run()
@@ -62,9 +63,10 @@ func main() {
 	}
 
 	promptService := promptui.Prompt{
-		Label:    "Service Name",
-		Validate: validateServiceName,
-		Default:  strings.Title(packageName),
+		Label:     "Service Name",
+		Validate:  validateServiceName,
+		AllowEdit: true,
+		Default:   strings.Title(packageName),
 	}
 
 	serviceName, err := promptService.Run()
