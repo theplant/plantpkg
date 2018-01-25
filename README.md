@@ -76,6 +76,7 @@ We intentionally limiting the package exposing API as Go interface for these rea
 - __Easy to mock__: Other packages can easily pass in `mock` package instance of the package, when they don't want to test your packages implementation.
 - __Easy to test__: write tests for all functions defined in `api.go`
 
+#### Use decoration to extend features example
 Say with the above `CheckoutService` for example, we want to validate the Address before call `ShippingAddressUpdate` and after call it we send an email to the user to notify the change, We can do:
 
 ```go
